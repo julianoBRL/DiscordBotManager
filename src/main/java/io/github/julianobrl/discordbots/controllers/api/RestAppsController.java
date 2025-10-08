@@ -29,12 +29,12 @@ public class RestAppsController {
     }
 
     @GetMapping("/{id}")
-    protected App view(@PathVariable(name = "id") String id){
+    protected App view(@PathVariable(name = "id") Long id){
         return service.getById(id);
     }
 
     @DeleteMapping("/{id}")
-    protected void delete(@PathVariable(name = "id") String id){
+    protected void delete(@PathVariable(name = "id") Long id){
         service.delete(id);
     }
 

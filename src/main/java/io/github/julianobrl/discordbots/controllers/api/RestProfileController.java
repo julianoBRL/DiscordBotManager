@@ -7,10 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 
@@ -32,11 +30,11 @@ public class RestProfileController {
     @GetMapping
     protected Profile getById(Authentication authentication){
         Profile profile = (Profile) authentication.getPrincipal();
-        return service.getById(String.valueOf(profile.getId()));
+        return service.getById(profile.getId());
     }
 
     @GetMapping("/{id}")
-    protected Profile getOtherById(@PathVariable(name = "id") String id){
+    protected Profile getOtherById(@PathVariable(name = "id") Long id){
         return service.getById(id);
     }
 
@@ -46,7 +44,7 @@ public class RestProfileController {
     }
 
     @DeleteMapping("/{id}")
-    protected void delete(@PathVariable(name = "id") String id){
+    protected void delete(@PathVariable(name = "id") Long id){
         service.delete(id);
     }
 

@@ -1,11 +1,14 @@
 package io.github.julianobrl.discordbots.services;
 
-import io.github.julianobrl.discordbots.entities.Bot;
-import io.github.julianobrl.discordbots.entities.Plugin;
-import io.github.julianobrl.discordbots.entities.dtos.socket.SelfInfoDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.julianobrl.discordbots.entities.dtos.Bot;
+import io.github.julianobrl.discordbots.integrations.docker.services.DockerService;
 import io.github.julianobrl.discordbots.factories.BotFactory;
-import io.github.julianobrl.discordbots.mappers.ContainerBotMapper;
-import io.github.julianobrl.discordbots.services.interfaces.IService;
+import io.github.julianobrl.discordbots.integrations.socket.components.SocketMessenger;
+import io.github.julianobrl.discordbots.integrations.docker.utils.ContainerBotMapper;
+import io.github.julianobrl.discordbots.integrations.socket.dto.reponses.SelfInfoResponse;
+import io.github.julianobrl.discordbots.integrations.socket.dto.requests.CommandRequest;
+import io.github.julianobrl.discordbots.integrations.socket.dto.requests.SetActivityRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,40 +18,27 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BotService implements IService<Bot> {
+public class BotService {
 
     private final DockerService dockerService;
     private final BotFactory botFactory;
     private final PluginService pluginService;
-    private final BotSocket botSocket;
+    private final SocketMessenger messenger;
+    private final ObjectMapper mapper;
 
-    @Override
     public List<Bot> list() {
         return dockerService.listContainers().stream()
                 .map(ContainerBotMapper::map).toList();
     }
 
-    @Override
-    public List<Bot> search() {
-        return List.of();
-    }
-
-    @Override
     public Bot create(Bot bot) {
         return botFactory.create(bot);
     }
 
-    @Override
     public Bot getById(String id) {
         return ContainerBotMapper.map(dockerService.getContainerById(id));
     }
 
-    @Override
-    public Bot update(String id, Bot updated) {
-        return null;
-    }
-
-    @Override
     public void delete(String botId) {
         pluginService.getInstalledPluginsByBotId(botId).forEach((plugin) ->{
             pluginService.uninstall(plugin.getId(), botId);
@@ -68,8 +58,15 @@ public class BotService implements IService<Bot> {
         return ContainerBotMapper.map(dockerService.startContainer(id));
     }
 
-    public SelfInfoDto getBotInfo(String id){
-        return botSocket.getBotInfo(id);
+    public SelfInfoResponse getBotInfo(String id){
+        return messenger.sendMessage(id, new CommandRequest("SELF", null), SelfInfoResponse.class);
     }
 
+    public String setActivity(String id, SetActivityRequest activity) {
+        return messenger.sendMessage(id,new CommandRequest("SET_ACTIVITY",activity), String.class);
+    }
+
+    public String getBotStatus(String id) {
+        return messenger.sendMessage(id,new CommandRequest("GET_STATUS",null), String.class);
+    }
 }

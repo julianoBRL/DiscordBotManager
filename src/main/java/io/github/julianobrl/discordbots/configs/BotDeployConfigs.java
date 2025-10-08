@@ -14,6 +14,9 @@ public class BotDeployConfigs {
     @Value("${docker.volume.base.path}")
     private String volumeBasePath;
 
+    @Value("${docker.volume.internal.base.path}")
+    private String internalBasePath;
+
     @Value("${docker.volume.plugins.path}")
     private String volumePluginsPath;
 

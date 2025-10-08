@@ -3,7 +3,6 @@ package io.github.julianobrl.discordbots.services;
 import io.github.julianobrl.discordbots.entities.Profile;
 import io.github.julianobrl.discordbots.entities.enums.ProfileRoles;
 import io.github.julianobrl.discordbots.repositories.ProfileRepository;
-import io.github.julianobrl.discordbots.services.interfaces.IService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,17 +38,17 @@ public class ProfileService  implements IService<Profile> {
     }
 
     @Override
-    public Profile getById(String id) {
-        return repository.getReferenceById(Long.parseLong(id));
+    public Profile getById(Long id) {
+        return repository.getReferenceById(id);
     }
 
     @Override
-    public Profile update(String id, Profile updated) {
+    public Profile update(Long id, Profile updated) {
         return null;
     }
 
     @Override
-    public void delete(String id) {
-        repository.deleteById(Long.parseLong(id));
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 }

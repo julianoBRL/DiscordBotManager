@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>io.github.julianobrl.discordbots</groupId>
 	<artifactId>DiscordBotManager</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.3.2</version>
 	<name>DiscordBotManager</name>
 	<description>Gestor de bots dos discord</description>
     <url>https://github.com/julianoBRL/DiscordBotFramework/tree/main/DiscordBotManager</url>
@@ -28,6 +28,13 @@
 	</properties>
 
 	<dependencies>
+
+        <!-- DISCORD -->
+        <dependency>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>${jda.version}</version>
+        </dependency>
 
         <!-- SECURITY -->
         <dependency>

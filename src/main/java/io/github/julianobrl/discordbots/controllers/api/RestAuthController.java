@@ -3,7 +3,7 @@ package io.github.julianobrl.discordbots.controllers.api;
 import io.github.julianobrl.discordbots.entities.Profile;
 import io.github.julianobrl.discordbots.entities.dtos.AuthRequest;
 import io.github.julianobrl.discordbots.entities.dtos.AuthResponse;
-import io.github.julianobrl.discordbots.services.JwtService;
+import io.github.julianobrl.discordbots.security.services.JwtService;
 import io.github.julianobrl.discordbots.services.ProfileService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

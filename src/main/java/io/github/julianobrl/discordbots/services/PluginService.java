@@ -9,11 +9,9 @@ import io.github.julianobrl.discordbots.exceptions.PluginException;
 import io.github.julianobrl.discordbots.exceptions.VersionException;
 import io.github.julianobrl.discordbots.factories.PluginFactory;
 import io.github.julianobrl.discordbots.repositories.PluginRepository;
-import io.github.julianobrl.discordbots.services.interfaces.IService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
@@ -49,11 +47,7 @@ public class PluginService implements IService<Plugin> {
 
     @Override
     public Plugin create(Plugin object) {
-        try {
-            return repository.save(object);
-        } catch (DataIntegrityViolationException e) {
-            throw new PluginException("Plugin already exists!", HttpStatus.BAD_REQUEST);
-        }
+        return repository.save(object);
     }
 
     public Plugin createByUrl(String url) {
@@ -63,22 +57,22 @@ public class PluginService implements IService<Plugin> {
     }
 
     @Override
-    public Plugin getById(String id) {
+    public Plugin getById(Long id) {
         return repository.findById(id).orElseThrow(
                 () -> new PluginException("Plugin not found!", HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public Plugin update(String id, Plugin updated) {
+    public Plugin update(Long id, Plugin updated) {
         return null;
     }
 
     @Transactional
     @Override
-    public void delete(String id) {
+    public void delete(Long id) {
         Plugin plugin = getById(id);
 
-        List<Pair<String, String>> toUninstall = plugin.getVersions().stream()
+        List<Pair<Long, String>> toUninstall = plugin.getVersions().stream()
                 .flatMap(version -> version.getBotsId().stream()
                         .map(botId -> Pair.of(id, botId)))
                 .toList();
@@ -88,7 +82,7 @@ public class PluginService implements IService<Plugin> {
         repository.deleteById(id);
     }
 
-    public Plugin install(String pluginId, String botId, String versionStr){
+    public Plugin install(Long pluginId, String botId, String versionStr){
 
         Plugin plugin = repository.findByIdAndVersionsVersion(pluginId, versionStr)
                 .orElseThrow(()->new PluginException("Plugin not found!", HttpStatus.NOT_FOUND));
@@ -110,7 +104,7 @@ public class PluginService implements IService<Plugin> {
         return repository.saveAndFlush(plugin);
     }
 
-    public Plugin uninstall(String pluginId, String botId) {
+    public Plugin uninstall(Long pluginId, String botId) {
 
         Plugin plugin = getById(pluginId);
 

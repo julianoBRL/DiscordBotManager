@@ -1,7 +1,8 @@
 package io.github.julianobrl.discordbots.controllers.api;
 
-import io.github.julianobrl.discordbots.entities.Bot;
-import io.github.julianobrl.discordbots.entities.dtos.socket.SelfInfoDto;
+import io.github.julianobrl.discordbots.entities.dtos.Bot;
+import io.github.julianobrl.discordbots.integrations.socket.dto.reponses.SelfInfoResponse;
+import io.github.julianobrl.discordbots.integrations.socket.dto.requests.SetActivityRequest;
 import io.github.julianobrl.discordbots.services.BotService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,7 +34,7 @@ public class RestBotsController {
     }
 
     @GetMapping("/info/{id}")
-    public SelfInfoDto info(@PathVariable(name = "id") String id){
+    public SelfInfoResponse info(@PathVariable(name = "id") String id){
         return service.getBotInfo(id);
     }
 
@@ -61,5 +62,17 @@ public class RestBotsController {
     public Bot restart(@PathVariable(name = "id") String id) {
         return service.restartBot(id);
     }
+
+    @PostMapping("/activity/{id}")
+    public String setActivity(@PathVariable(name = "id") String id,
+                            @RequestBody SetActivityRequest activity) {
+        return service.setActivity(id,activity);
+    }
+
+    @GetMapping("/status/{id}")
+    public String getStatus(@PathVariable(name = "id") String id){
+        return service.getBotStatus(id);
+    }
+
 
 }

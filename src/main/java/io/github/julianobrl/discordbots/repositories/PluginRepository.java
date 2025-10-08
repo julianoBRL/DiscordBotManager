@@ -16,9 +16,9 @@ public interface PluginRepository extends JpaRepository<Plugin, Long>, JpaSpecif
     @Query("SELECT p FROM Plugin p JOIN p.versions v WHERE :botId MEMBER OF v.botsId")
     Optional<List<Plugin>> findInstalledPluginsByBotsId(String botId);
 
-    Optional<Plugin> findByIdAndVersionsVersion(String id, String version);
+    Optional<Plugin> findByIdAndVersionsVersion(Long id, String version);
 
-    Optional<Plugin> findById(String id);
-    void deleteById(String id);
+    Optional<Plugin> findById(Long id);
+    void deleteById(Long id);
 
 }

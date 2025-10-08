@@ -1,13 +1,10 @@
 package io.github.julianobrl.discordbots.factories;
 
 import io.github.julianobrl.discordbots.configs.BotDeployConfigs;
-import io.github.julianobrl.discordbots.entities.Bot;
 import io.github.julianobrl.discordbots.entities.Plugin;
 import io.github.julianobrl.discordbots.entities.Version;
-import io.github.julianobrl.discordbots.entities.enums.PluginStatus;
 import io.github.julianobrl.discordbots.exceptions.PluginException;
-import io.github.julianobrl.discordbots.services.BotService;
-import io.github.julianobrl.discordbots.services.DockerService;
+import io.github.julianobrl.discordbots.integrations.docker.services.DockerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,7 +28,6 @@ public class PluginFactory {
     private final DockerService dockerService;
 
     public Version install(Version version, String botId){
-
 
         log.info("Preparing downloading link...");
         String[] downloadLinkSplit = version.getSourceUrl().split("/");
